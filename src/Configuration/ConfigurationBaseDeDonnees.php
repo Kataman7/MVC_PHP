@@ -1,59 +1,21 @@
 <?php
 namespace App\Configuration;
+
 class ConfigurationBaseDeDonnees
 {
-
     static private array $configurationBaseDeDonnees = array(
-        // Le nom d'hote est webinfo a l'IUT
-        // ou localhost sur votre machine
-        //
-        // ou webinfo.iutmontp.univ-montp2.fr
-        // pour accéder à webinfo depuis l'extérieur
-        'nomHote' => 'webinfo.iutmontp.univ-montp2.fr',
-        // A l'IUT, vous avez une base de données nommee comme votre login
-        // Sur votre machine, vous devrez creer une base de données
-        'nomBaseDeDonnees' => 'SAE3A_Q5D',
-        // À l'IUT, le port de MySQL est particulier : 3316
-        // Ailleurs, on utilise le port par défaut : 3306
-        'port' => '3316',
-        // A l'IUT, c'est votre login
-        // Sur votre machine, vous avez surement un compte 'root'
-        'login' => 'lebalchm',
-        // A l'IUT, c'est le même mdp que PhpMyAdmin
-        // Sur votre machine personelle, vous avez creez ce mdp a l'installation
-        'motDePasse' => '5T8EP0uhzZ(*9-pp'
+        'cheminBaseDeDonnees' => __DIR__ . '/../../database/database.db'
     );
 
-    static public function getLogin(): string
+    static public function getCheminBaseDeDonnees(): string
     {
-        // L'attribut statique $configurationBaseDeDonnees
-        // s'obtient avec la syntaxe ConfigurationBaseDeDonnees::$configurationBaseDeDonnees
-        // au lieu de $this->configurationBaseDeDonnees pour un attribut non statique
-        return ConfigurationBaseDeDonnees::$configurationBaseDeDonnees['login'];
+        return ConfigurationBaseDeDonnees::$configurationBaseDeDonnees['cheminBaseDeDonnees'];
     }
 
-    static public function getMotDePasse(): string
+    static public function getPDO(): \PDO
     {
-        return ConfigurationBaseDeDonnees::$configurationBaseDeDonnees['motDePasse'];
-
+        $cheminBaseDeDonnees = self::getCheminBaseDeDonnees();
+        return new \PDO("sqlite:" . $cheminBaseDeDonnees);
     }
-
-    static public function getNomHote(): string
-    {
-        return ConfigurationBaseDeDonnees::$configurationBaseDeDonnees['nomHote'];
-    }
-
-    static public function getNomBaseDeDonnees(): string
-    {
-        return ConfigurationBaseDeDonnees::$configurationBaseDeDonnees['nomBaseDeDonnees'];
-    }
-
-    static public function getPort(): int
-    {
-        return ConfigurationBaseDeDonnees::$configurationBaseDeDonnees['port'];
-    }
-
-
 }
-
 ?>
