@@ -1,10 +1,9 @@
 <?php
 
 /** @var string $titre */
-
 /** @var string $cheminCorpsVue */
+/** @var array $messagesFlash */
 
-use App\Lib\ConnexionUtilisateur;
 use App\Lib\MessageFlash;
 ?>
 <!DOCTYPE html>
@@ -22,13 +21,14 @@ use App\Lib\MessageFlash;
     </header>
     <div>
         <?php
-        /** @var string[][] $messagesFlash */
-        var_dump($messagesFlash);
-        foreach ($messagesFlash as $type => $messagesFlashPourUnType) {
-            // $type est l'une des valeurs suivantes : "success", "info", "warning", "danger"
-            // $messagesFlashPourUnType est la liste des messages flash d'un type
-            foreach ($messagesFlashPourUnType as $messageFlash) {
-                echo "<div class=\"alert alert-$type\"> <p> $messageFlash </p> </div>";
+        if (isset($messagesFlash)) {
+            var_dump($messagesFlash);
+            foreach ($messagesFlash as $type => $messagesFlashPourUnType) {
+                // $type est l'une des valeurs suivantes : "success", "info", "warning", "danger"
+                // $messagesFlashPourUnType est la liste des messages flash d'un type
+                foreach ($messagesFlashPourUnType as $messageFlash) {
+                    echo "<div class=\"alert alert-$type\"> <p> $messageFlash </p> </div>";
+                }
             }
         }
         ?>
