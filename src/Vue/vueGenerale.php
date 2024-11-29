@@ -7,7 +7,7 @@
 use App\Lib\MessageFlash;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -22,7 +22,6 @@ use App\Lib\MessageFlash;
     <div>
         <?php
         if (isset($messagesFlash)) {
-            var_dump($messagesFlash);
             foreach ($messagesFlash as $type => $messagesFlashPourUnType) {
                 // $type est l'une des valeurs suivantes : "success", "info", "warning", "danger"
                 // $messagesFlashPourUnType est la liste des messages flash d'un type
@@ -44,5 +43,4 @@ use App\Lib\MessageFlash;
         <p>Footer - 2024</p>
     </footer>
 </body>
-
 </html>

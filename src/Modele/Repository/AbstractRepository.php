@@ -11,6 +11,18 @@ abstract class AbstractRepository
     protected abstract function getColumnNames(): array;
     protected abstract function formatSQLArray(AbstractDataObject $objet): array;
     protected abstract function constructFromSQLArray(array $objetFormatTableau): AbstractDataObject;
+    private static AbstractRepository $instance;
+
+    private function __construct() {}
+
+    public static function getInstance(): AbstractRepository
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new static();
+        }
+        return self::$instance;
+    }
+
     protected function getColumnNamesForUpdate(): array
     {
         return $this->getColumnNames();

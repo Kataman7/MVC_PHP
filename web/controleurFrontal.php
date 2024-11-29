@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 use App\Lib\MessageFlash;
 
 require_once __DIR__ . '/../src/Lib/Psr4AutoloaderClass.php';
