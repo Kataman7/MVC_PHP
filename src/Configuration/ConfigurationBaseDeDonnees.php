@@ -1,21 +1,21 @@
 <?php
+
 namespace App\Configuration;
 
-class ConfigurationBaseDeDonnees
+abstract class ConfigurationBaseDeDonnees
 {
-    static private array $configurationBaseDeDonnees = array(
-        'cheminBaseDeDonnees' => __DIR__ . '/../../database/database.db'
-    );
-
-    static public function getCheminBaseDeDonnees(): string
+    public abstract function getDataSourceName(): string;
+    public function getLogin(): ?string
     {
-        return ConfigurationBaseDeDonnees::$configurationBaseDeDonnees['cheminBaseDeDonnees'];
+        return null;
+    }
+    public function getMotDePasse(): ?string
+    {
+        return null;
     }
 
-    static public function getPDO(): \PDO
+    public function getOption()
     {
-        $cheminBaseDeDonnees = self::getCheminBaseDeDonnees();
-        return new \PDO("sqlite:" . $cheminBaseDeDonnees);
+        return null;
     }
 }
-?>

@@ -2,13 +2,14 @@
 
 namespace App\Lib;
 use App\Configuration\ConfigurationBaseDeDonnees;
+use App\Configuration\ConfigurationBaseDeDonneesSqlite;
 use PDO;
 
 class ConnexionBaseDeDonnees
 {
     private static ?ConnexionBaseDeDonnees $instance = null;
-
     private PDO $pdo;
+    private ConfigurationBaseDeDonnees $config;
 
     public static function getPdo(): PDO
     {
@@ -17,13 +18,13 @@ class ConnexionBaseDeDonnees
 
     private function __construct()
     {
-        // Code du constructeur
-        $cheminBaseDeDonnees = ConfigurationBaseDeDonnees::getCheminBaseDeDonnees();
-        // Convertir le chemin relatif en chemin absolu
-        // Connexion à la base de données SQLite
-        $this->pdo = new PDO("sqlite:$cheminBaseDeDonnees");
+        $this->config = new ConfigurationBaseDeDonneesSqlite();
+        $dsn = $this->config->getDataSourceName();
+        $login = $this->config->getLogin();
+        $motDePasse = $this->config->getMotDePasse();
+        $options = $this->config->getOption();
 
-        // On active le mode d'affichage des erreurs, et le lancement d'exception en cas d'erreur
+        $this->pdo = new PDO($dsn, $login, $motDePasse, $options);
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 

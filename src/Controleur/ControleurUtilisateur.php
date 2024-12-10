@@ -37,7 +37,7 @@ class ControleurUtilisateur extends ControleurGenerique
             $login = $_REQUEST['login'];
             $mdp = $_REQUEST['mdp'];
             /** @var Utilisateur $utilisateur **/
-            $utilisateur = UtilisateurRepository::getInstance()->getParClesPrimaires([$login]);
+            $utilisateur = (new UtilisateurRepository())->getParClesPrimaires([$login]);
             if ($utilisateur != null && MotDePasse::verifier($mdp, $utilisateur->getMdp())) {
                 ConnexionUtilisateur::connecter($login);
                 MessageFlash::ajouter("success", "Connexion réussie");
