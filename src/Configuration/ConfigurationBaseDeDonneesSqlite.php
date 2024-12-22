@@ -12,12 +12,6 @@ class ConfigurationBaseDeDonneesSqlite extends ConfigurationBaseDeDonnees
         return ConfigurationBaseDeDonneesSqlite::$configurationBaseDeDonnees['cheminBaseDeDonnees'];
     }
 
-    static public function getPDO(): \PDO
-    {
-        $cheminBaseDeDonnees = self::getCheminBaseDeDonnees();
-        return new \PDO("sqlite:" . $cheminBaseDeDonnees);
-    }
-
     public function getDataSourceName(): string
     {
         return "sqlite:" . ConfigurationBaseDeDonneesSqlite::getCheminBaseDeDonnees();

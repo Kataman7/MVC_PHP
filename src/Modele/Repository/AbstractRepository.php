@@ -6,26 +6,26 @@ use App\Modele\DataObject\AbstractDataObject;
 
 abstract class AbstractRepository
 {
-    protected abstract function getTableName(): string;
-    protected abstract function getPrimaryKeyNames(): array;
-    protected abstract function getColumnNames(): array;
+    protected abstract function getNomTable(): string;
+    protected abstract function getNomClesPrimaires(): array;
+    protected abstract function getNomColonne(): array;
     protected abstract function formatSQLArray(AbstractDataObject $objet): array;
-    protected abstract function constructFromSQLArray(array $objetFormatTableau): AbstractDataObject;
+    protected abstract function constuireDepuisSQLArray(array $objetFormatTableau): AbstractDataObject;
 
     public function __construct() {}
 
     protected function getColumnNamesForUpdate(): array
     {
-        return $this->getColumnNames();
+        return $this->getNomColonne();
     }
 
     public function get(): array
     {
         $utilisateur = [];
-        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query("SELECT * FROM " . $this->getTableName());
+        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query("SELECT * FROM " . $this->getNomTable());
         foreach ($pdoStatement as $utilisateurFormatTableau)
         {
-            $utilisateur[] = $this->constructFromSQLArray($utilisateurFormatTableau);
+            $utilisateur[] = $this->constuireDepuisSQLArray($utilisateurFormatTableau);
         }
         return $utilisateur;
     }
@@ -34,41 +34,41 @@ abstract class AbstractRepository
     {
         $conditions = [];
            $params = [];
-        foreach ($this->getPrimaryKeyNames() as $index => $key) {
+        foreach ($this->getNomClesPrimaires() as $index => $key) {
             $conditions[] = "$key = :$key";
             $params[$key] = $primaryKeys[$index];
         }
-        $sql = "SELECT * from " . $this->getTableName() . " WHERE " . implode(" AND ", $conditions);
+        $sql = "SELECT * from " . $this->getNomTable() . " WHERE " . implode(" AND ", $conditions);
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($sql);
         $pdoStatement->execute($params);
         $objetFormatTableau = $pdoStatement->fetch();
         if (!$objetFormatTableau) return null;
-        return $this->constructFromSQLArray($objetFormatTableau);
+        return $this->constuireDepuisSQLArray($objetFormatTableau);
     }
 
     public function supprimerParClePrimaires(array $primaryKeys): bool
     {
         $conditions = [];
         $params = [];
-        foreach ($this->getPrimaryKeyNames() as $index => $key) {
+        foreach ($this->getNomClesPrimaires() as $index => $key) {
             $conditions[] = "$key = :$key";
             $params[$key] = $primaryKeys[$index];
         }
-        $sql = "DELETE FROM " . $this->getTableName() . " WHERE " . implode(" AND ", $conditions);
+        $sql = "DELETE FROM " . $this->getNomTable() . " WHERE " . implode(" AND ", $conditions);
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($sql);
         return $pdoStatement->execute($params);
     }
 
     public function mettreAJour(AbstractDataObject $objet): void
     {
-        $tab = $this->getColumnNames($objet);
+        $tab = $this->getNomColonne($objet);
         $str = " ";
         foreach ($tab as $value) {
             $str = $str . $value . " = :" . $value;
             if ($value != end($tab)): $str = $str .  ", ";
             endif;
         }
-        $sql = "UPDATE " . $this->getTableName() . " SET " . $str . " WHERE " . $tab[0] . " = :" . $tab[0];
+        $sql = "UPDATE " . $this->getNomTable() . " SET " . $str . " WHERE " . $tab[0] . " = :" . $tab[0];
         echo $sql;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($sql);
         $values = $this->formatSQLArray($objet);
@@ -77,10 +77,18 @@ abstract class AbstractRepository
 
     public function ajouter(AbstractDataObject $objet): bool
     {
-            $columns = $this->getColumnNames();
+            $columns = $this->getNomColonne();
             $placeholders = array_map(fn($col) => ":$col", $columns);
-            $sql = "INSERT INTO " . $this->getTableName() . " (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $placeholders) . ")";
+            $sql = "INSERT INTO " . $this->getNomTable() . " (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $placeholders) . ")";
             $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($sql);
             return $pdoStatement->execute($this->formatSQLArray($objet));
+    }
+
+    public function ajouterSiNexistePas(AbstractDataObject $objet): bool
+    {
+        if ($this->getParClesPrimaires($this->getNomClesPrimaires()) == null) {
+            return $this->ajouter($objet);
+        }
+        return false;
     }
 }

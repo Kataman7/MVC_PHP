@@ -3,49 +3,43 @@
 namespace App\Modele\Repository;
 
 use App\Modele\DataObject\AbstractDataObject;
-use App\Modele\DataObject\Admin;
 use App\Modele\DataObject\Utilisateur;
-use App\Modele\Repository\AbstractRepository;
 
 class UtilisateurRepository extends AbstractRepository
 {
-    protected function getTableName(): string
+    protected function getNomTable(): string
     {
         return 'utilisateur';
     }
 
-    public function getPrimaryKeyNames(): array
+    public function getNomClesPrimaires(): array
     {
-        return ['login'];
+        return ['email'];
     }
 
-    protected function getColumnNames(): array
+    protected function getNomColonne(): array
     {
-        return ['login', 'mdp', 'nom', 'prenom', 'role'];
+        return ['email', 'motDePasse', 'nomUtilisateur', 'prenom', 'role'];
     }
 
-    /**
-     * @return array
-     * @var Utilisateur $object
-     */
     protected function formatSQLArray(AbstractDataObject $objet): array
     {
         /** @var Utilisateur $objet */
         return array(
-            'login' => $objet->getLogin(),
-            'mdp' => $objet->getMdp(),
-            'nom' => $objet->getNomUtilisateur(),
+            'email' => $objet->getEmail(),
+            'motDePasse' => $objet->getMotDePasse(),
+            'nomUtilisateur' => $objet->getNomUtilisateur(),
             'prenom' => $objet->getPrenom(),
-            'role' => $objet->getRole(),
+            'role' => $objet->getRole()
         );
     }
 
-    public function constructFromSQLArray(array $objetFormatTableau): AbstractDataObject
+    public function constuireDepuisSQLArray(array $objetFormatTableau): AbstractDataObject
     {
         return new Utilisateur(
-            $objetFormatTableau['login'],
-            $objetFormatTableau['mdp'],
-            $objetFormatTableau['nom'],
+            $objetFormatTableau['email'],
+            $objetFormatTableau['motDePasse'],
+            $objetFormatTableau['nomUtilisateur'],
             $objetFormatTableau['prenom'],
             $objetFormatTableau['role']
         );

@@ -1,35 +1,31 @@
 <?php
 namespace App\Configuration;
+
 use PDO;
 
 class ConfigurationBaseDeDonneesMySQL extends ConfigurationBaseDeDonnees
 {
-    private string $nomHote = 'webinfo.iutmontp.univ-montp2.fr';
-    private string $nomBaseDeDonnees = 'SAE3A_Q5D';
-    private string $port = '3316';
-    private ?string $login = '';
-    private ?string $motDePasse = '';
-
-    public function getDataSourceName(): string
-    {
-        return "mysql:host={$this->nomHote};port={$this->port};dbname={$this->nomBaseDeDonnees}";
-    }
-
     public function getLogin(): ?string
     {
-        return $this->login;
+        return "your login";
     }
-
     public function getMotDePasse(): ?string
     {
-        return $this->motDePasse;
+        return "your password";
     }
-
-    public function getOption()
+    public function getOption(): array
     {
-        return array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
+        return array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        );
     }
-
+    public function getDataSourceName(): string
+    {
+        $host = "localhost";
+        $port = "3306";
+        $nomBaseDeDonnees = "your database name";
+        return "mysql:host=$host;port=$port;dbname=$nomBaseDeDonnees";
+    }
 }
-
 ?>
