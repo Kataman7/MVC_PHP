@@ -4,19 +4,28 @@ namespace App\Modele\DataObject;
 
 class Utilisateur extends AbstractDataObject
 {
+    private int $codeUtilisateur;
     private string $email;
     private string $motDePasse;
     private string $nomUtilisateur;
     private string $prenom;
     private string $role;
+    private int $codePanier;
 
-    public function __construct(string $email, string $motDePasse, string $nomUtilisateur, string $prenom, string $role)
+    public function __construct(int $codeUtilisateur, string $email, string $motDePasse, string $nomUtilisateur, string $prenom, string $role, int $codePanier)
     {
+        $this->codeUtilisateur = $codeUtilisateur;
         $this->email = $email;
         $this->motDePasse = $motDePasse;
         $this->nomUtilisateur = $nomUtilisateur;
         $this->prenom = $prenom;
         $this->role = $role;
+        $this->codePanier = $codePanier;
+    }
+
+    public function getCodeUtilisateur(): int
+    {
+        return $this->codeUtilisateur;
     }
     public function getEmail(): string
     {
@@ -38,6 +47,14 @@ class Utilisateur extends AbstractDataObject
     {
         return $this->role;
     }
+    public function getCodePanier(): int
+    {
+        return $this->codePanier;
+    }
+    public function setCodeUtilisateur(int $codeUtilisateur): void
+    {
+        $this->codeUtilisateur = $codeUtilisateur;
+    }
     public function setEmail(string $email): void
     {
         $this->email = $email;
@@ -57,5 +74,9 @@ class Utilisateur extends AbstractDataObject
     public function setRole(string $role): void
     {
         $this->role = $role;
+    }
+    public function setCodePanier(int $codePanier): void
+    {
+        $this->codePanier = $codePanier;
     }
 }

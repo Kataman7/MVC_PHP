@@ -13,7 +13,7 @@ class ConnexionUtilisateur
     public static function connecter(Utilisateur $utilisateur): void
     {
         $session = Session::getInstance();
-        $session->enregistrer(self::$cleConnexion, $utilisateur);
+        $session->ecrire(self::$cleConnexion, $utilisateur);
     }
 
     public static function estConnecte(): bool

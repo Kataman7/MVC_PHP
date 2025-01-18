@@ -29,7 +29,7 @@ class Session
         return isset($_SESSION[$nom]);
     }
 
-    public function enregistrer(string $nom, mixed $valeur): void
+    public function ecrire(string $nom, mixed $valeur): void
     {
         $_SESSION[$nom] = $valeur;
     }
